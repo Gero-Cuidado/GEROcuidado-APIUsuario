@@ -33,7 +33,11 @@ async function bootstrap() {
     new ModelNotFoundExceptionFilter(),
   );
 
-  app.enableCors();
+  app.enableCors({
+    origin: ['http://192.168.0.15', 'http://10.0.2.2', 'http://127.0.0.1', '0.0.0.0'], // Substitua pelos domínios reais usados
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  });
 
   app.connectMicroservice({
     transport: Transport.TCP,
@@ -45,7 +49,7 @@ async function bootstrap() {
   });
 
   await app.startAllMicroservices();
-  await app.listen(3001);
+  await app.listen(3001, '0.0.0.0'); // Adicionando '0.0.0.0'
   console.log(`Application is running on: ${await app.getUrl()}`);
 }
 bootstrap();
